@@ -3,6 +3,7 @@ import typing
 from Services.alunoService import alunoService, aluno
 from telas.configuraConta import configuraConta
 from telas.professores import professor, professores
+from telas.denunciartela import denunciartela
 from telas.turmas import turmas
 class principal:
     def buttonContaClick(self, event):
@@ -18,6 +19,11 @@ class principal:
         self.window.destroy()
         professoresTela = professores(self.aluno)
         professoresTela.render()
+    def buttonDenunciasClick(self, event):
+        self.window.destroy()
+        denuncias= denunciartela(self.aluno)
+        denuncias.renderDenuncias()
+
     def render(self, aluno):
         self.window = tk.Tk()
         self.aluno = aluno
@@ -31,4 +37,9 @@ class principal:
         buttonConta = tk.Button(text="conta")
         buttonConta.bind("<Button-1>", self.buttonContaClick)
         buttonConta.pack()
+        print(self.aluno)
+        if self.aluno.moderador:
+            buttonDenuncias = tk.Button(text="denuncias")
+            buttonDenuncias.bind("<Button-1>", self.buttonDenunciasClick)
+            buttonDenuncias.pack()
         self.window.mainloop()

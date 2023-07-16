@@ -20,10 +20,14 @@ class professores:
     def criarAvaliacao(self, event):
         con = sqlite3.connect(strings().path)
         x = con.cursor().execute(f"""select * from Avaliacao""").fetchall()
+        biggest = 0
+        for a in x:
+            if a[0]>biggest:
+                biggest = a[0]
         con.execute(f"""insert into Avaliacao (id, comentario, tipo, idAluno ) 
-                    values({len(x)}, '{self.avaliarEntry.get()}', 1 , {self.aluno.id})""")
+                    values({biggest+1}, '{self.avaliarEntry.get()}', 1 , {self.aluno.id})""")
         con.execute(f"""insert into AvaliacaoProfessor (idAvaliacao, idProfessor ) 
-                            values({len(x)}, {self.professorId})""")
+                            values({biggest+1}, {self.professorId})""")
         con.commit()
         self.VerAvaliacoes()
     def denunciarButtonPress(self,event):
