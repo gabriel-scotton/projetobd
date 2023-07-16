@@ -1,0 +1,100 @@
+CREATE TABLE IF NOT EXISTS Departamento(
+	id INTEGER PRIMARY KEY,
+	nome TEXT NOT NULL UNIQUE
+	
+
+);
+CREATE TABLE IF NOT EXISTS Disciplina(
+	id TEXT,
+	idDepartamento integer,
+	nome TEXT NOT NULL,
+	PRIMARY KEY (id)
+	FOREIGN KEY (idDepartamento)
+		REFERENCES Departamento (id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+
+);
+CREATE TABLE IF NOT EXISTS Turma(
+	id INTEGER,
+	idDisciplina TEXT,
+	nome TEXT NOT NULL,
+	semestre TEXT NOT NULL,
+	idProfessor INTEGER,
+	PRIMARY KEY (id)
+	FOREIGN KEY (idDisciplina)
+		REFERENCES Departamento (id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE	
+	FOREIGN KEY (idProfessor)
+		REFERENCES Professor (id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS Professor(
+	id INTEGER PRIMARY KEY,
+	nome TEXT not null unique,
+	idDepartamento INTEGER not null,
+	foreign key (idDepartamento)
+		REFERENCES Departamento (id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS AlunoTurma(
+	idAluno Integer not null,
+	idTurma Integer not null,
+	primary key (idAluno, idTurma),
+	foreign key (idAluno)
+		REFERENCES Aluno (id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+	foreign key (idTurma)
+		REFERENCES Turma (id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS Avaliacao(
+	id INTEGER PRIMARY KEY,
+	comentario TEXT NOT NULL,
+	tipo INTEGER NOT NULL,
+	check(tipo = 0 OR tipo = 1)
+);
+CREATE TABLE IF NOT EXISTS AvaliacaoTurma(
+	idAvaliacao INTEGER PRIMARY KEY,
+	idTurma integer not null,
+	FOREIGN KEY (idTurma)
+		References Turma (id)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+	FOREIGN KEY (idAvaliacao)
+		References Avaliacao (id)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+	
+);
+CREATE TABLE IF NOT EXISTS AvaliacaoProfessor(
+	idAvaliacao INTEGER PRIMARY KEY,
+	idProfessor not null,
+	FOREIGN KEY (idProfessor)
+		References Professor (id)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+	FOREIGN KEY (idAvaliacao)
+		References Avaliacao (id)
+			ON UPDATE CASCADE
+			ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS Denuncia(
+	idAvaliacao INTEGER ,
+	idAluno INTEGER,
+	comentario TEXT,
+	PRIMARY KEY (idAvaliacao, idAluno),
+	foreign key (idAluno)
+		REFERENCES Aluno (id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+	foreign key (idAvaliacao)
+		REFERENCES Avaliacao (id)
+			ON DELETE CASCADE
+			ON UPDATE CASCADE
+);
